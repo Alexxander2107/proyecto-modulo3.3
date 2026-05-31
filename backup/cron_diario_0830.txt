@@ -1,5 +1,0 @@
-Alternativa cron (si estuvieras en Linux):
-
-0 8 * * * /usr/bin/php /ruta/al/proyecto/backup/backup.php >> /ruta/al/proyecto/backup/backup.log 2>&1
-
-En Windows no aplica directamente; usar Task Scheduler.

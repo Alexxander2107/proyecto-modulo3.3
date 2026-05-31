@@ -1,4 +1,3 @@
-hola
 <?php require_once 'auth.php'; requireAuth(); ?>
 <?php
 session_start();
@@ -35,7 +34,7 @@ if (isset($_SESSION['usuario'])) {
     <p>Control de clientes, productos, ventas y reportes.</p>
 </section>
     
-<section class="cards">
+<section class="cards"> 
     <div class="card">
         <h3>Clientes</h3>
         <a href="clientes/listar.php">Administrar clientes registrados.</a>
