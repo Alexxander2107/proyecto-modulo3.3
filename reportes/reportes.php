@@ -2,6 +2,40 @@
 
 
 <?php
+$sqlProductosMasVendido = "SELECT p.nombre AS producto, SUM(dv.cantidad) AS total_cantidad
+                           FROM detalle_ventas dv
+                           INNER JOIN productos p ON dv.id_producto = p.id_producto
+                           GROUP BY dv.id_producto, p.nombre
+                           ORDER BY total_cantidad DESC
+                           LIMIT 1";
+
+$sqlClienteMasCompras = "SELECT c.nombre AS nombre, c.apellido AS apellido, COUNT(v.id_venta) AS total_compras
+                           FROM ventas v
+                           INNER JOIN clientes c ON v.id_cliente = c.id_cliente
+                           GROUP BY c.id_cliente, c.nombre, c.apellido
+                           ORDER BY total_compras DESC
+                           LIMIT 1";
+
+$sqlCategoriaMasBuscada = "SELECT cat.nombre AS categoria, SUM(dv.cantidad) AS total_cantidad
+                           FROM detalle_ventas dv
+                           INNER JOIN productos p ON dv.id_producto = p.id_producto
+                           INNER JOIN categorias cat ON p.id_categoria = cat.id_categoria
+                           GROUP BY cat.id_categoria, cat.nombre
+                           ORDER BY total_cantidad DESC
+                           LIMIT 1";
+
+$sqlProductoMasVendido = $sqlProductosMasVendido; // alias conceptual
+
+$stmtProdTop = $conexion->query($sqlProductosMasVendido);
+$prodTop = $stmtProdTop ? $stmtProdTop->fetch(PDO::FETCH_ASSOC) : null;
+
+$stmtClienteTop = $conexion->query($sqlClienteMasCompras);
+$clienteTop = $stmtClienteTop ? $stmtClienteTop->fetch(PDO::FETCH_ASSOC) : null;
+
+$stmtCatTop = $conexion->query($sqlCategoriaMasBuscada);
+$catTop = $stmtCatTop ? $stmtCatTop->fetch(PDO::FETCH_ASSOC) : null;
+
+// Backward-compatible: mantener gráficas existentes
 $sqlCategorias = "SELECT c.nombre AS categoria, COUNT(p.id_producto) AS total
                   FROM categorias c
                   LEFT JOIN productos p ON p.id_categoria = c.id_categoria
@@ -25,6 +59,7 @@ $categorias = $conexion->query($sqlCategorias)->fetchAll(PDO::FETCH_ASSOC);
 $clientesVentas = $conexion->query($sqlClientes)->fetchAll(PDO::FETCH_ASSOC);
 $productos = $conexion->query($sqlProductos)->fetchAll(PDO::FETCH_ASSOC);
 $ventas = $conexion->query($sqlVentas)->fetchAll(PDO::FETCH_ASSOC);
+
 
 $catLabels = [];
 $catData = [];
@@ -104,8 +139,49 @@ include '../layout/navbar.php';
         </div>
     </div>
 
-    <script>
+    <div class="report-grid" style="margin-top: 1.5rem; grid-template-columns: repeat(4, minmax(0, 1fr));">
+        <div class="chart-card">
+            <h2>Producto más vendido</h2>
+            <p style="margin:0.5rem 0 0; font-size: 1.05rem; color: var(--text); font-weight: 700;">
+                <?= htmlspecialchars($prodTop['producto'] ?? 'N/A') ?>
+            </p>
+            <p style="margin:0.35rem 0 0; color: var(--muted);">
+                Cantidad: <?= (int)($prodTop['total_cantidad'] ?? 0) ?>
+            </p>
+        </div>
+        <div class="chart-card">
+            <h2>Cliente con más compras</h2>
+            <p style="margin:0.5rem 0 0; font-size: 1.05rem; color: var(--text); font-weight: 700;">
+                <?= htmlspecialchars(trim(($clienteTop['nombre'] ?? '').' '.($clienteTop['apellido'] ?? ''))) ?: 'N/A' ?>
+            </p>
+            <p style="margin:0.35rem 0 0; color: var(--muted);">
+                Compras: <?= (int)($clienteTop['total_compras'] ?? 0) ?>
+            </p>
+        </div>
+        <div class="chart-card">
+            <h2>Categoría más buscada</h2>
+            <p style="margin:0.5rem 0 0; font-size: 1.05rem; color: var(--text); font-weight: 700;">
+                <?= htmlspecialchars($catTop['categoria'] ?? 'N/A') ?>
+            </p>
+            <p style="margin:0.35rem 0 0; color: var(--muted);">
+                Cantidad: <?= (int)($catTop['total_cantidad'] ?? 0) ?>
+            </p>
+        </div>
+        <div class="chart-card">
+            <h2>Producto más vendido (detalle)</h2>
+            <p style="margin:0.5rem 0 0; font-size: 1.05rem; color: var(--text); font-weight: 700;">
+                <?= htmlspecialchars($prodTop['producto'] ?? 'N/A') ?>
+            </p>
+            <p style="margin:0.35rem 0 0; color: var(--muted);">
+                Total vendido: <?= (int)($prodTop['total_cantidad'] ?? 0) ?>
+            </p>
+        </div>
+    </div>
+
+
+<script>
         const chartConfig = (ctx, labels, data, label, color) => new Chart(ctx, {
+
             type: 'bar',
             data: {
                 labels,

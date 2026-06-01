@@ -14,7 +14,6 @@ if (session_status() === PHP_SESSION_NONE) {
         <a href="<?= htmlspecialchars($navLinks['ventas'] ?? '../ventas/nueva_venta.php') ?>">Ventas</a>
         <a href="<?= htmlspecialchars($navLinks['reportes'] ?? '../reportes/reportes.php') ?>">Reportes</a>
 
-
         <?php if (function_exists('hasRole') && hasRole('gerente')): ?>
             <a href="<?= htmlspecialchars($navLinks['usuarios'] ?? '../empleados/listar.php') ?>">Usuarios</a>
         <?php endif; ?>

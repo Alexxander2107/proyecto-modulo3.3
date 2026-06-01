@@ -17,30 +17,54 @@ if ($cantidad < 1) {
 }
 
 // Handle manual client creation
-if (!empty($_POST['manual_cliente']) && !empty($_POST['manual_nombre']) && !empty($_POST['manual_correo'])) {
-    $nombreC = trim($_POST['manual_nombre']);
+if (!empty($_POST['manual_cliente'])) {
+    $nombreC = trim($_POST['manual_nombre'] ?? '');
     $apellidoC = trim($_POST['manual_apellido'] ?? '');
-    $correoC = trim($_POST['manual_correo']);
+    $correoC = trim($_POST['manual_correo'] ?? '');
 
-    $stmtCheck = $conexion->prepare('SELECT id_cliente FROM clientes WHERE email = :email LIMIT 1');
-    $stmtCheck->execute([':email' => $correoC]);
-    $existing = $stmtCheck->fetch(PDO::FETCH_ASSOC);
-    if ($existing) {
-        $id_cliente = $existing['id_cliente'];
-    } else {
-        $stmtIns = $conexion->prepare('INSERT INTO clientes(nombre, apellido, email, telefono, direccion) VALUES(:nombre, :apellido, :email, :telefono, :direccion)');
-        $stmtIns->execute([
-            ':nombre' => $nombreC,
-            ':apellido' => $apellidoC,
-            ':email' => $correoC,
-            ':telefono' => null,
-            ':direccion' => null
-        ]);
-        $id_cliente = $conexion->lastInsertId();
+    if ($nombreC === '' || $apellidoC === '' || $correoC === '') {
+        header('Location: nueva_venta.php?error=invalid');
+        exit;
+    }
+
+    if (!filter_var($correoC, FILTER_VALIDATE_EMAIL)) {
+        header('Location: nueva_venta.php?error=email');
+        exit;
+    }
+
+    try {
+        $conexion->beginTransaction();
+
+        $stmtCheck = $conexion->prepare('SELECT id_cliente FROM clientes WHERE email = :email LIMIT 1');
+        $stmtCheck->execute([':email' => $correoC]);
+        $existing = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+
+        if ($existing) {
+            $id_cliente = intval($existing['id_cliente']);
+        } else {
+            $stmtIns = $conexion->prepare('INSERT INTO clientes(nombre, apellido, email, telefono, direccion) VALUES(:nombre, :apellido, :email, :telefono, :direccion)');
+            $stmtIns->execute([
+                ':nombre' => $nombreC,
+                ':apellido' => $apellidoC,
+                ':email' => $correoC,
+                ':telefono' => null,
+                ':direccion' => null
+            ]);
+            $id_cliente = intval($conexion->lastInsertId());
+        }
+
+        $conexion->commit();
+    } catch (PDOException $e) {
+        if ($conexion->inTransaction()) {
+            $conexion->rollBack();
+        }
+        header('Location: nueva_venta.php?error=cliente');
+        exit;
     }
 } else {
     $id_cliente = intval($_POST['id_cliente'] ?? 0);
 }
+
 
 // Handle manual product creation
 if (!empty($_POST['manual_producto']) && !empty($_POST['manual_prod_nombre'])) {
@@ -113,8 +137,11 @@ try {
     header('Location: nueva_venta.php?success=1');
     exit;
 } catch (PDOException $e) {
-    $conexion->rollBack();
+    if ($conexion->inTransaction()) {
+        $conexion->rollBack();
+    }
     header('Location: nueva_venta.php?error=registro');
     exit;
 }
+
 
