@@ -40,13 +40,13 @@ if ($id > 0) {
         $conexion->exec('SET FOREIGN_KEY_CHECKS = 1');
 
         $conexion->commit();
-        header('Location: listar.php?success=1');
+        header('Location: listar.php?success=1&reportes_refresh=1');
         exit;
     } catch (PDOException $e) {
         if ($conexion->inTransaction()) {
             $conexion->rollBack();
         }
-        header('Location: listar.php?error=delete_failed');
+        header('Location: listar.php?error=delete_failed&reportes_refresh=0');
         exit;
     }
 }

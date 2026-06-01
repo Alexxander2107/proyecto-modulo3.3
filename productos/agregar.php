@@ -32,7 +32,7 @@ if($_POST){
 
     if($exists){
         // Redirigir a la lista con mensaje de error si ya existe
-        header('Location: listar.php?msg=exists&nombre=' . urlencode($nombre));
+        header('Location: listar.php?msg=exists&nombre=' . urlencode($nombre).'&reportes_refresh=0');
         exit;
     } else {
         $sql = "INSERT INTO productos(nombre, precio, stock, id_categoria)
@@ -48,7 +48,7 @@ if($_POST){
         ]);
 
         // Redirigir a la lista con mensaje de éxito
-        header('Location: listar.php?msg=created');
+        header('Location: listar.php?msg=created&reportes_refresh=1');
         exit;
     }
 }

@@ -20,7 +20,7 @@ if($_POST){
         ':direccion' => $_POST['direccion']
     ]);
 
-    header('Location: listar.php');
+    header('Location: listar.php?reportes_refresh=1');
 }
 ?>
 

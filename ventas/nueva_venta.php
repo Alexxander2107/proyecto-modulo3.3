@@ -173,6 +173,22 @@ include '../layout/navbar.php';
     toggleManualCliente();
     toggleManualProducto();
     updateProductMeta();
+
+    const ventaRegistrada = <?= $success ? 'true' : 'false' ?>;
+    const dispatchVentaRegistrada = () => {
+        const payload = JSON.stringify({ event: 'venta-registrada', updatedAt: new Date().toISOString() });
+        if (window.BroadcastChannel) {
+            const channel = new BroadcastChannel('reportes');
+            channel.postMessage(payload);
+            channel.close();
+        }
+        localStorage.setItem('reportes-event', payload);
+        setTimeout(() => localStorage.removeItem('reportes-event'), 500);
+    };
+
+    if (ventaRegistrada) {
+        dispatchVentaRegistrada();
+    }
 </script>
 </body>
 </html>

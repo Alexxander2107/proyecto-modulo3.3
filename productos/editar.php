@@ -26,7 +26,7 @@ if($_POST){
         ':id' => $id
     ]);
 
-    header('Location: listar.php');
+    header('Location: listar.php?reportes_refresh=1');
 }
 ?>
 

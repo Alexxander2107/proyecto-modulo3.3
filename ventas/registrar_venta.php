@@ -134,7 +134,7 @@ try {
     ]);
 
     $conexion->commit();
-    header('Location: nueva_venta.php?success=1');
+    header('Location: nueva_venta.php?success=1&reportes_refresh=1');
     exit;
 } catch (PDOException $e) {
     if ($conexion->inTransaction()) {

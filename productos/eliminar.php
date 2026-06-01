@@ -7,5 +7,5 @@ $sql = "DELETE FROM productos WHERE id_producto = :id";
 $stmt = $conexion->prepare($sql);
 $stmt->execute([':id' => $id]);
 
-header('Location: listar.php');
+header('Location: listar.php?reportes_refresh=1');
 ?>

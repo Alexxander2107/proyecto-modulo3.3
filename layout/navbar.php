@@ -12,7 +12,6 @@ if (session_status() === PHP_SESSION_NONE) {
         <a href="<?= htmlspecialchars($navLinks['clientes'] ?? '../clientes/listar.php') ?>">Clientes</a>
         <a href="<?= htmlspecialchars($navLinks['productos'] ?? '../productos/listar.php') ?>">Productos</a>
         <a href="<?= htmlspecialchars($navLinks['ventas'] ?? '../ventas/nueva_venta.php') ?>">Ventas</a>
-        <a href="<?= htmlspecialchars($navLinks['reportes'] ?? '../reportes/reportes.php') ?>">Reportes</a>
 
         <?php if (function_exists('hasRole') && hasRole('gerente')): ?>
             <a href="<?= htmlspecialchars($navLinks['usuarios'] ?? '../empleados/listar.php') ?>">Usuarios</a>
