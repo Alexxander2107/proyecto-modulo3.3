@@ -51,6 +51,7 @@ include 'layout/navbar.php';
 
     <div class="dashboard">
         <div class="box box-figura box-clientes">
+
             <div class="box-figura-icon" aria-hidden="true">👥</div>
             <h2><?php echo $clientes; ?></h2>
             <p>Clientes registrados</p>
@@ -71,8 +72,12 @@ include 'layout/navbar.php';
             <a class="btn" href="ventas/listar.php">Ver ventas</a>
         </div>
     </div>
+
+
 </main>
 
 </body>
 </html>
+
+
 

@@ -148,7 +148,7 @@ textarea:focus-visible {
 }
 
 /* Barra superior */
-.header{
+.header/*  */{
     width: 100%;
     padding: 10px 20px;
     background: #1e293b;
@@ -564,3 +564,46 @@ button[type="submit"] {
         font-size: 2.25rem;
     }
 }
+
+/* Animación: caja de cartón recorriendo el dashboard */
+.cardboard-runner{
+    position: relative;
+    width: 100%;
+    height: 120px;
+    margin-top: 1.25rem;
+    overflow: hidden;
+}
+
+.bb8-runner{height:120px;}
+
+.bb8-obj-wrap{
+    position:absolute;
+    top:8px;
+    left:0;
+    width:260px;
+    height:90px;
+    pointer-events:none;
+    opacity:0.98;
+}
+
+
+
+
+.cardboard-box-img{
+    position: absolute;
+    top: 18px;
+    left: -140px;
+    width: 130px;
+    height: auto;
+    filter: drop-shadow(0 14px 20px rgba(0,0,0,0.35));
+    animation: cardboardMove 6s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes cardboardMove{
+    0%{ transform: translateX(0) scale(1) rotate(0deg); opacity: 1; }
+    50%{ transform: translateX(calc(100vw - 100px)) scale(1) rotate(0deg); opacity: 1; }
+    51%{ transform: translateX(calc(100vw - 100px)) scale(1) rotate(180deg); }
+    100%{ transform: translateX(0) scale(1) rotate(180deg); opacity: 1; }
+}
+
