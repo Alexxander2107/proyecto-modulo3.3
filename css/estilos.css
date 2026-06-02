@@ -363,6 +363,31 @@ table tr:last-child td {
     border-bottom: none;
 }
 
+.sales-history {
+    margin-top: 2rem;
+}
+
+.sales-history .section-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.sales-history .section-header h2 {
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+.sales-history .section-header .subtitle {
+    margin: 0;
+}
+
+.sales-history table {
+    margin-top: 0;
+}
+
 .login-container {
     min-height: calc(100vh - 70px);
     display: flex;

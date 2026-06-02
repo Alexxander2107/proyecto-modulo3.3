@@ -1,13 +1,20 @@
-<?php require_once '../auth.php'; requireRole(['gerente','contador','auditor']); include '../conexion.php'; ?>
+<?php 
+require_once '../auth.php'; 
+requireRole(['gerente','contador','auditor']); 
+include '../conexion.php'; 
 
-
-<?php
 $ventas = $conexion->query(
-    'SELECT ventas.*, clientes.nombre AS cliente_nombre, clientes.apellido AS cliente_apellido FROM ventas INNER JOIN clientes ON ventas.id_cliente = clientes.id_cliente ORDER BY ventas.fecha DESC'
+    'SELECT ventas.*, clientes.nombre AS cliente_nombre, clientes.apellido AS cliente_apellido 
+     FROM ventas 
+     INNER JOIN clientes ON ventas.id_cliente = clientes.id_cliente 
+     ORDER BY ventas.fecha DESC'
 )->fetchAll(PDO::FETCH_ASSOC);
 
 $detalleStmt = $conexion->prepare(
-    'SELECT detalle_ventas.*, productos.nombre AS producto_nombre FROM detalle_ventas INNER JOIN productos ON detalle_ventas.id_producto = productos.id_producto WHERE detalle_ventas.id_venta = :venta'
+    'SELECT dv.cantidad, p.nombre AS producto_nombre, p.precio 
+     FROM detalle_ventas dv
+     INNER JOIN productos p ON dv.id_producto = p.id_producto 
+     WHERE dv.id_venta = :venta'
 );
 ?>
 
@@ -66,12 +73,15 @@ include '../layout/navbar.php';
                     $detalleStmt->execute([':venta' => $venta['id_venta']]);
                     $detalles = $detalleStmt->fetchAll(PDO::FETCH_ASSOC);
                     foreach ($detalles as $detalle):
+                        $precio = isset($detalle['precio']) ? floatval($detalle['precio']) : 0;
+                        $cantidad = intval($detalle['cantidad']);
+                        $subtotal = $precio * $cantidad;
                     ?>
                     <tr>
                         <td><?= htmlspecialchars($detalle['producto_nombre']) ?></td>
-                        <td><?= $detalle['cantidad'] ?></td>
-                        <td>$<?= number_format($detalle['precio'], 2) ?></td>
-                        <td>$<?= number_format($detalle['subtotal'], 2) ?></td>
+                        <td><?= $cantidad ?></td>
+                        <td>$<?= number_format($precio, 2) ?></td>
+                        <td>$<?= number_format($subtotal, 2) ?></td>
                     </tr>
                     <?php endforeach; ?>
                     <tr class="nested-total-row">

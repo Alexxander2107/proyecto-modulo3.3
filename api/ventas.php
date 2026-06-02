@@ -5,6 +5,15 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 try {
     if ($method === 'GET') {
+        if (isset($_GET['dashboard'])) {
+            $countStmt = $conexion->query('SELECT COUNT(*) AS total FROM ventas');
+            $count = intval($countStmt->fetchColumn());
+            $recentStmt = $conexion->query('SELECT v.id_venta, v.fecha, v.total, c.nombre AS cliente_nombre, c.apellido AS cliente_apellido FROM ventas v INNER JOIN clientes c ON v.id_cliente = c.id_cliente ORDER BY v.fecha DESC LIMIT 5');
+            $recent = $recentStmt->fetchAll(PDO::FETCH_ASSOC);
+            echo json_encode(['count' => $count, 'recent' => $recent]);
+            exit;
+        }
+
         $stmt = $conexion->query('SELECT ventas.*, clientes.nombre AS cliente_nombre, clientes.apellido AS cliente_apellido FROM ventas INNER JOIN clientes ON ventas.id_cliente = clientes.id_cliente ORDER BY ventas.fecha DESC');
         echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
         exit;
