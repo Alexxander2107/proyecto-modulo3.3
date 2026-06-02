@@ -1,8 +1,14 @@
-<?php require_once 'auth.php'; requireAuth(); include 'conexion.php'; ?>
-<?php $error = $_GET['error'] ?? ''; ?>
-
-
 <?php
+require_once 'auth.php';
+requireAuth();
+include 'conexion.php';
+
+header('Cache-Control: no-cache, no-store, must-revalidate');
+header('Pragma: no-cache');
+header('Expires: 0');
+
+$error = $_GET['error'] ?? '';
+
 $clientes = $conexion->query("SELECT COUNT(*) FROM clientes")->fetchColumn();
 $productos = $conexion->query("SELECT COUNT(*) FROM productos")->fetchColumn();
 $ventas = $conexion->query("SELECT COUNT(*) FROM ventas")->fetchColumn();
@@ -147,6 +153,12 @@ include 'layout/navbar.php';
     document.addEventListener('DOMContentLoaded', () => {
         refreshDashboardSales();
         setInterval(refreshDashboardSales, 15000);
+    });
+
+    window.addEventListener('pageshow', (event) => {
+        if (event.persisted) {
+            refreshDashboardSales();
+        }
     });
 </script>
 

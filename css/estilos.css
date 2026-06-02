@@ -250,6 +250,16 @@ main,
     margin-top: 1.5rem;
 }
 
+.backup-history table {
+    width: 100%;
+}
+
+@media (max-width: 900px) {
+    .backup-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 .chart-card {
     background: var(--surface);
     border: 1px solid rgba(148, 163, 184, 0.12);
