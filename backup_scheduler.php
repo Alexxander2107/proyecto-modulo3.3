@@ -63,20 +63,23 @@ function findMysqldumpExecutable(): ?string
     return null;
 }
 
-function exportDatabaseWithMysqldump(string $exePath, string $backupFilePath): bool
+function exportDatabaseWithMysqldump(string $exePath, string $backupFilePath, array $tables = [], string $mode = 'full'): bool
 {
     $user = DB_USER;
     $passOption = DB_PASS !== '' ? '--password=' . DB_PASS : '--password=';
     $host = DB_HOST;
     $database = DB_NAME;
+    $modeOption = $mode === 'data' ? '--no-create-info' : '';
 
     $command = sprintf(
-        '"%s" --user=%s %s --host=%s %s > "%s"',
+        '"%s" --user=%s %s --host=%s %s %s %s > "%s"',
         $exePath,
         escapeshellarg($user),
         $passOption,
         escapeshellarg($host),
+        $modeOption,
         escapeshellarg($database),
+        implode(' ', array_map('escapeshellarg', $tables)),
         $backupFilePath
     );
 
@@ -84,19 +87,21 @@ function exportDatabaseWithMysqldump(string $exePath, string $backupFilePath): b
     return is_file($backupFilePath) && filesize($backupFilePath) > 0;
 }
 
-function exportDatabaseWithPDO(PDO $connection, string $backupFilePath): bool
+function exportDatabaseWithPDO(PDO $connection, string $backupFilePath, array $tables = [], string $mode = 'full'): bool
 {
     $sqlDump = '';
-    $tables = $connection->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN);
+    if (empty($tables)) {
+        $tables = $connection->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN);
+    }
 
     foreach ($tables as $table) {
-        $createResult = $connection->query("SHOW CREATE TABLE `{$table}`")->fetch(PDO::FETCH_ASSOC);
-        if (!$createResult || !isset($createResult['Create Table'])) {
-            continue;
+        if ($mode !== 'data') {
+            $createResult = $connection->query("SHOW CREATE TABLE `{$table}`")->fetch(PDO::FETCH_ASSOC);
+            if ($createResult && isset($createResult['Create Table'])) {
+                $sqlDump .= "DROP TABLE IF EXISTS `{$table}`;\n";
+                $sqlDump .= $createResult['Create Table'] . ";\n\n";
+            }
         }
-
-        $sqlDump .= "DROP TABLE IF EXISTS `{$table}`;\n";
-        $sqlDump .= $createResult['Create Table'] . ";\n\n";
 
         $rows = $connection->query("SELECT * FROM `{$table}`")->fetchAll(PDO::FETCH_ASSOC);
         if (!$rows) {
@@ -123,7 +128,7 @@ function exportDatabaseWithPDO(PDO $connection, string $backupFilePath): bool
     return file_put_contents($backupFilePath, $sqlDump) !== false;
 }
 
-function runBackup(PDO $conexion): string|false
+function runBackup(PDO $conexion, array $tables = [], string $mode = 'full'): string|false
 {
     if (!ensureBackupDirectory()) {
         return false;
@@ -136,12 +141,12 @@ function runBackup(PDO $conexion): string|false
     $mysqldumpExe = findMysqldumpExecutable();
 
     if ($mysqldumpExe !== null) {
-        $exportOk = exportDatabaseWithMysqldump($mysqldumpExe, $backupFilePath);
+        $exportOk = exportDatabaseWithMysqldump($mysqldumpExe, $backupFilePath, $tables, $mode);
     }
 
     if (!$exportOk) {
         try {
-            $exportOk = exportDatabaseWithPDO($conexion, $backupFilePath);
+            $exportOk = exportDatabaseWithPDO($conexion, $backupFilePath, $tables, $mode);
         } catch (Throwable $e) {
             $exportOk = false;
         }
