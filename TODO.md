@@ -1,9 +1,12 @@
-# TODO - Actualización automática de gráficas de Reportes
+# TODO - Traducción completa (ES/EN)
 
-- [x] Identificar dónde están las gráficas: `reportes/reportes.php` (Chart.js) y datos: `reportes/data.php`.
-- [x] Verificar qué eventos/refresco ya existen en `reportes/reportes.php`.
-- [x] Hacer que al completar **CRUD de clientes/productos** se dispare un refresco en `reportes.php` usando `reportes_refresh=1`.
-- [x] Hacer que al completar **registrar venta** se dispare un refresco en `reportes.php` usando `reportes_refresh=1`.
-- [x] Asegurar que `reportes/reportes.php` lea el parámetro `reportes_refresh` y recargue los datos.
-- [ ] (Opcional) Validar con pruebas manuales: abrir reportes y luego ejecutar alta/edición/eliminación y confirmar actualización.
+- [ ] Paso 1: Extender `i18n.php` con nuevas keys necesarias (tablas, botones, placeholders, mensajes hardcodeados).
+- [ ] Paso 2: Asegurar que todas las páginas cargan `i18n.php` y usan `html lang` dinámico.
+- [ ] Paso 3: Actualizar `clientes/listar.php` para reemplazar textos hardcodeados por `t(...)`.
+- [ ] Paso 4: Actualizar `productos/listar.php` para reemplazar textos hardcodeados por `t(...)`.
+- [ ] Paso 5: Actualizar `ventas/listar.php` para reemplazar textos hardcodeados por `t(...)`.
+- [ ] Paso 6: Actualizar `dashboard.php` para traducir headers y textos hardcodeados.
+- [ ] Paso 7: Actualizar `index.php`, `login.php`, `registro.php` y páginas CRUD (agregar/editar/eliminar) para traducir todo lo visible.
+- [ ] Paso 8: Revisar alerts/confirm/JS: asegurar textos traducidos en `confirm()` y `alert()`.
+- [ ] Paso 9: Probar en navegador: cambiar idioma desde navbar y verificar que TODO el contenido renderiza en EN.
 

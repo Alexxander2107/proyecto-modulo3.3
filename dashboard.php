@@ -18,8 +18,9 @@ $ultimasVentas = $conexion->query(
 ?>
 
 
+<?php require_once 'i18n.php'; ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?= htmlspecialchars($lang) ?>">
 <head>
     <meta charset="UTF-8">
     <title>Dashboard</title>
@@ -42,17 +43,17 @@ include 'layout/navbar.php';
 <main class="section">
     <div class="page-header">
         <div>
-            <h1>Dashboard Principal</h1>
-            <p class="subtitle">Bienvenido <?= htmlspecialchars(currentUser()) ?>. Gestiona tus módulos desde aquí.</p>
+            <h1><?= htmlspecialchars(t('dashboard.title')) ?></h1>
+            <p class="subtitle"><?= htmlspecialchars(t('dashboard.welcome')) ?> <?= htmlspecialchars(currentUser()) ?>. <?= htmlspecialchars(t('dashboard.manage')) ?></p>
         </div>
         <div class="button-group">
             <?php if (!empty($error) && $error === 'ups_algo_salio_mal'): ?>
-                <p class="alert alert-error">ups, algo salio mal</p>
+                <p class="alert alert-error"><?= htmlspecialchars(t('dashboard.error')) ?></p>
             <?php endif; ?>
-            <button type="button" class="btn" onclick="location.href='ventas/nueva_venta.php'">Registrar Venta</button>
+            <button type="button" class="btn" onclick="location.href='ventas/nueva_venta.php'"><?= htmlspecialchars(t('dashboard.register_sale')) ?></button>
             <?php if (hasRole('gerente')): ?>
-                <button type="button" class="btn" onclick="location.href='empleados/listar.php'">Administrar Usuarios</button>
-                <button type="button" class="btn" onclick="location.href='backup.php'">Crear respaldo</button>
+                <button type="button" class="btn" onclick="location.href='empleados/listar.php'"><?= htmlspecialchars(t('dashboard.manage_users')) ?></button>
+                <button type="button" class="btn" onclick="location.href='backup.php'"><?= htmlspecialchars(t('dashboard.create_backup')) ?></button>
             <?php endif; ?>
 
         </div>
@@ -64,29 +65,29 @@ include 'layout/navbar.php';
 
             <div class="box-figura-icon" aria-hidden="true">👥</div>
             <h2><?php echo $clientes; ?></h2>
-            <p>Clientes registrados</p>
-            <a class="btn" href="clientes/listar.php">Ver clientes</a>
+            <p><?= htmlspecialchars(t('dashboard.clients_registered')) ?></p>
+            <a class="btn" href="clientes/listar.php"><?= htmlspecialchars(t('dashboard.view_clients')) ?></a>
         </div>
 
         <div class="box box-figura box-productos">
             <div class="box-figura-icon" aria-hidden="true">📦</div>
             <h2><?php echo $productos; ?></h2>
-            <p>Productos disponibles</p>
-            <a class="btn" href="productos/listar.php">Ver productos</a>
+            <p><?= htmlspecialchars(t('dashboard.products_available')) ?></p>
+            <a class="btn" href="productos/listar.php"><?= htmlspecialchars(t('dashboard.view_products')) ?></a>
         </div>
 
         <div class="box box-figura box-ventas">
             <div class="box-figura-icon" aria-hidden="true">🧾</div>
             <h2 id="sales-count"><?php echo $ventas; ?></h2>
-            <p>Ventas registradas</p>
-            <a class="btn" href="ventas/listar.php">Ver ventas</a>
+            <p><?= htmlspecialchars(t('dashboard.sales_registered')) ?></p>
+            <a class="btn" href="ventas/listar.php"><?= htmlspecialchars(t('dashboard.view_sales')) ?></a>
         </div>
     </div>
 
     <section class="sales-history">
         <div class="section-header">
-            <h2>Últimas ventas</h2>
-            <p class="subtitle">Historial de las cinco ventas más recientes.</p>
+            <h2><?= htmlspecialchars(t('dashboard.last_sales')) ?></h2>
+            <p class="subtitle"><?= htmlspecialchars(t('dashboard.last_sales_sub')) ?></p>
         </div>
 
         <table>
@@ -101,7 +102,7 @@ include 'layout/navbar.php';
             <tbody id="recent-sales-body">
                 <?php if (count($ultimasVentas) === 0): ?>
                     <tr>
-                        <td colspan="4">No hay ventas registradas aún.</td>
+                        <td colspan="4"><?= htmlspecialchars(t('dashboard.no_sales')) ?></td>
                     </tr>
                 <?php else: ?>
                     <?php foreach ($ultimasVentas as $venta): ?>
@@ -133,7 +134,7 @@ include 'layout/navbar.php';
             if (!tbody) return;
 
             if (data.recent.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4">No hay ventas registradas aún.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4"><?= htmlspecialchars(t('dashboard.no_sales')) ?></td></tr>';
                 return;
             }
 

@@ -1,0 +1,10 @@
+.lang-switch{display:inline-flex;gap:.5rem;align-items:center;margin-left:auto}
+.lang-link{font-size:.85rem;font-weight:700;color:#e2e8f0;padding:.35rem .6rem;border:1px solid rgba(148,163,184,0.16);border-radius:999px;background:rgba(17,24,39,0.6)}
+.lang-link:hover{text-decoration:none;background:rgba(31,41,55,0.9)}
+
+.lang-translate-btn{display:inline-flex;align-items:center;gap:.5rem;margin-left:1rem;padding:.45rem .75rem;border:1px solid rgba(148,163,184,0.16);border-radius:999px;background:rgba(17,24,39,0.6);color:#e2e8f0;text-decoration:none;font-weight:700;}
+.lang-translate-btn:hover{background:rgba(31,41,55,0.9);text-decoration:none;}
+.lang-translate-label{font-size:.85rem;}
+.lang-translate-sep{opacity:.6;font-weight:800;}
+.lang-translate-value{font-size:.85rem;}
+

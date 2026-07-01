@@ -55,11 +55,13 @@ if ($_POST) {
 }
 ?>
 
+<?php require_once 'i18n.php'; ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?= htmlspecialchars($lang) ?>">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title><?= htmlspecialchars(t('auth.login')) ?></title>
+
     <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
@@ -68,30 +70,35 @@ if ($_POST) {
 
     <form method="POST" class="login-form">
 
-        <h1>Iniciar Sesión</h1>
+        <h1><?= htmlspecialchars(t('auth.login')) ?></h1>
+
 
         <?php if(isset($error)): ?>
             <p><?= htmlspecialchars($error) ?></p>
         <?php endif; ?>
 
         <div class="form-group">
-            <label for="correo">Correo</label>
-            <input id="correo" type="email" name="correo" placeholder="Correo" required>
+            <label for="correo"><?= htmlspecialchars(t('auth.email')) ?></label>
+            <input id="correo" type="email" name="correo" placeholder="<?= htmlspecialchars(t('auth.email')) ?>" required>
+
         </div>
 
         <div class="form-group password-field">
-            <label for="clave">Contraseña</label>
+            <label for="clave"><?= htmlspecialchars(t('auth.password')) ?></label>
+
             <div class="password-input-wrapper">
-                <input id="clave" type="password" name="clave" placeholder="Contraseña" required>
+                <input id="clave" type="password" name="clave" placeholder="<?= htmlspecialchars(t('auth.password')) ?>" required>
                 <label class="field-toggle">
                     <input type="checkbox" id="showPassword">
-                    <span>Mostrar</span>
+                    <span><?= htmlspecialchars(t('auth.show_password')) ?></span>
+
                 </label>
             </div>
         </div>
 
-        <button type="submit">Ingresar</button>
-        <p style="margin-top:1rem; text-align:center; color:#cbd5e1;">¿No tienes cuenta? <a href="registro.php">Regístrate</a></p>
+        <button type="submit"><?= htmlspecialchars(t('auth.submit_login')) ?></button>
+        <p style="margin-top:1rem; text-align:center; color:#cbd5e1;"><?= htmlspecialchars(t('auth.no_account')) ?> <a href="registro.php"><?= htmlspecialchars(t('auth.register')) ?></a></p>
+
     </form>
 </div>
 
