@@ -2,6 +2,8 @@
 require_once '../auth.php'; 
 requireRole(['gerente','contador','auditor']); 
 include '../conexion.php'; 
+require_once '../i18n.php';
+
 
 $ventas = $conexion->query(
     'SELECT ventas.*, clientes.nombre AS cliente_nombre, clientes.apellido AS cliente_apellido 
@@ -41,19 +43,19 @@ include '../layout/navbar.php';
 <main class="section">
     <div class="page-header">
         <div>
-            <h1>Listado de Ventas</h1>
-            <p class="subtitle">Historial y detalle de ventas registradas.</p>
+            <h1><?= htmlspecialchars(t('sales.list.title')) ?></h1>
+            <p class="subtitle"><?= htmlspecialchars(t('sales.list.subtitle')) ?></p>
         </div>
-        <button type="button" class="btn back-button" onclick="history.back()">Volver</button>
+            <button type="button" class="btn back-button" onclick="history.back()"><?= htmlspecialchars(t('global.back')) ?></button>
     </div>
 
     <table>
         <tr>
-            <th>ID Venta</th>
-            <th>Cliente</th>
-            <th>Total</th>
-            <th>Fecha</th>
-            <th>Detalle</th>
+            <th><?= htmlspecialchars(t('table.id_sale')) ?></th>
+            <th><?= htmlspecialchars(t('table.client')) ?></th>
+            <th><?= htmlspecialchars(t('table.total')) ?></th>
+            <th><?= htmlspecialchars(t('table.date')) ?></th>
+            <th><?= htmlspecialchars(t('sales.detail')) ?></th>
         </tr>
         <?php foreach ($ventas as $venta): ?>
         <tr>
@@ -64,10 +66,10 @@ include '../layout/navbar.php';
             <td>
                 <table class="nested-detail-table">
                     <tr>
-                        <th>Producto</th>
-                        <th>Cantidad</th>
-                        <th>Precio</th>
-                        <th>Subtotal</th>
+                        <th><?= htmlspecialchars(t('sales.detail.product')) ?></th>
+                        <th><?= htmlspecialchars(t('sales.detail.quantity')) ?></th>
+                        <th><?= htmlspecialchars(t('sales.detail.price')) ?></th>
+                        <th><?= htmlspecialchars(t('sales.detail.subtotal')) ?></th>
                     </tr>
                     <?php
                     $detalleStmt->execute([':venta' => $venta['id_venta']]);
@@ -85,7 +87,7 @@ include '../layout/navbar.php';
                     </tr>
                     <?php endforeach; ?>
                     <tr class="nested-total-row">
-                        <td colspan="3" style="text-align:right;font-weight:700;">Total</td>
+                        <td colspan="3" style="text-align:right;font-weight:700;"><?= htmlspecialchars(t('sales.detail.total')) ?></td>
                         <td style="font-weight:700;">$<?= number_format($venta['total'], 2) ?></td>
                     </tr>
                 </table>

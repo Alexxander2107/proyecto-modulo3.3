@@ -1,4 +1,4 @@
-<?php require_once '../auth.php'; requireRole(['gerente','contador']); include '../conexion.php'; ?>
+pdate<?php require_once '../auth.php'; requireRole(['gerente','contador']); include '../conexion.php'; require_once '../i18n.php'; ?>
 
 <?php
 $search = trim($_GET['search'] ?? '');
@@ -46,7 +46,7 @@ if($msg === 'exists'){
 
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?= htmlspecialchars($lang ?? 'es') ?>">
 <head>
     <meta charset="UTF-8">
     <title>Productos</title>
@@ -68,12 +68,12 @@ include '../layout/navbar.php';
 <main class="section">
     <div class="page-header">
         <div>
-            <h1>Listado de Productos</h1>
-            <p class="subtitle">Información de stock y precios disponibles.</p>
+            <h1><?= htmlspecialchars(t('products.list_title')) ?></h1>
+            <p class="subtitle"><?= htmlspecialchars(t('products.list_subtitle')) ?></p>
         </div>
         <div class="page-actions">
-            <a href="agregar.php" class="btn">Agregar Producto</a>
-            <button type="button" class="btn back-button" onclick="history.back()">Volver</button>
+            <a href="agregar.php" class="btn"><?= htmlspecialchars(t('products.add_button')) ?></a>
+            <button type="button" class="btn back-button" onclick="history.back()"><?= htmlspecialchars(t('products.back')) ?></button>
         </div>
     </div>
 
@@ -83,26 +83,26 @@ include '../layout/navbar.php';
 
     <form method="GET" class="filters">
         <div class="filter-row">
-            <input type="search" name="search" placeholder="Buscar producto..." value="<?= htmlspecialchars($search) ?>">
+            <input type="search" name="search" placeholder="<?= htmlspecialchars(t('products.search_placeholder')) ?>" value="<?= htmlspecialchars($search) ?>">
 
             <select name="categoria">
-                <option value="">Todas las categorías</option>
+                <option value=""><?= htmlspecialchars(t('global.all_categories')) ?></option>
                 <?php foreach ($categorias as $categoria): ?>
                     <option value="<?= $categoria['id_categoria'] ?>" <?= $categoriaFiltro == $categoria['id_categoria'] ? 'selected' : '' ?>><?= htmlspecialchars($categoria['nombre']) ?></option>
                 <?php endforeach; ?>
             </select>
 
-            <button type="submit" class="btn">Filtrar</button>
+            <button type="submit" class="btn"><?= htmlspecialchars(t('global.filter')) ?></button>
         </div>
     </form>
 
     <table>
         <tr>
-            <th>Producto</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th>Categoría</th>
-            <th>Acciones</th>
+            <th><?= htmlspecialchars(t('products.table.product')) ?></th>
+            <th><?= htmlspecialchars(t('products.table.price')) ?></th>
+            <th><?= htmlspecialchars(t('products.table.stock')) ?></th>
+            <th><?= htmlspecialchars(t('products.table.category')) ?></th>
+            <th><?= htmlspecialchars(t('products.table.actions')) ?></th>
         </tr>
 
         <?php foreach($productos as $producto): ?>

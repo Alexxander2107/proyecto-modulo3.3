@@ -14,7 +14,7 @@ if (isset($_SESSION['usuario'])) {
     <title><?= htmlspecialchars(t('app.title')) ?></title>
 
     <link rel="stylesheet" href="css/estilos.css">
-</head>
+</head>u
 <body>
     <header class="header">
     <div class="logo-container">

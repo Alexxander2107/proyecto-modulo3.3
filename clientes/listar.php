@@ -8,8 +8,9 @@ $success = isset($_GET['success']);
 ?>
 
 
+<?php require_once '../i18n.php'; ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?= htmlspecialchars($lang ?? 'es') ?>">
 <head>
     <meta charset="UTF-8">
     <title>Clientes</title>
@@ -31,28 +32,28 @@ include '../layout/navbar.php';
 <main class="section">
     <div class="page-header">
         <div>
-            <h1>Listado de Clientes</h1>
-            <p class="subtitle">Gestión de clientes registrados en el sistema.</p>
+            <h1><?= htmlspecialchars(t('clients.list_title')) ?></h1>
+            <p class="subtitle"><?= htmlspecialchars(t('clients.list_subtitle')) ?></p>
         </div>
-        <button type="button" class="btn back-button" onclick="history.back()">Volver</button>
+        <button type="button" class="btn back-button" onclick="history.back()"><?= htmlspecialchars(t('global.back')) ?></button>
     </div>
 
-    <a href="agregar.php" class="btn">Nuevo Cliente</a>
+    <a href="agregar.php" class="btn"><?= htmlspecialchars(t('clients.new_title')) ?></a>
 
     <?php if ($error === 'has_sales'): ?>
-        <p class="alert alert-error">No se puede eliminar el cliente porque tiene ventas registradas.</p>
+        <p class="alert alert-error"><?= htmlspecialchars(t('clients.alert.cannot_delete_has_sales')) ?></p>
     <?php elseif ($success): ?>
-        <p class="alert alert-success">Cliente eliminado correctamente.</p>
+        <p class="alert alert-success"><?= htmlspecialchars(t('clients.alert.deleted')) ?></p>
     <?php endif; ?>
 
     <table>
     <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Email</th>
-        <th>Teléfono</th>
-        <th>Acciones</th>
+            <th>ID</th>
+            <th><?= htmlspecialchars(t('client.field.name')) ?></th>
+            <th><?= htmlspecialchars(t('client.field.last_name')) ?></th>
+            <th><?= htmlspecialchars(t('client.field.email')) ?></th>
+            <th><?= htmlspecialchars(t('client.field.phone')) ?></th>
+            <th><?= htmlspecialchars(t('global.edit')) ?></th>
     </tr>
 
     <?php foreach($clientes as $cliente): ?>

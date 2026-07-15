@@ -116,13 +116,13 @@ if ($_POST) {
 
         if (!correo.value.trim() || !clave.value.trim()) {
             event.preventDefault();
-            alert('Ingresa correo y contraseña para continuar.');
+            alert('<?= addslashes(t('login.alert.missing_credentials')) ?>');
             return;
         }
 
         if (clave.value.length < 6) {
             event.preventDefault();
-            alert('La contraseña debe tener al menos 6 caracteres.');
+            alert('<?= addslashes(t('login.alert.password_length')) ?>');
         }
     });
 </script>

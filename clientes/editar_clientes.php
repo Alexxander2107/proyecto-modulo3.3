@@ -34,8 +34,9 @@ if($_POST){
 }
 ?>
 
+<?php require_once '../i18n.php'; ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?= htmlspecialchars($lang ?? 'es') ?>">
 <head>
     <meta charset="UTF-8">
     <title>Editar Cliente</title>
@@ -57,19 +58,19 @@ include '../layout/navbar.php';
 <main class="section">
     <div class="page-header">
         <div>
-            <h1>Editar Cliente</h1>
-            <p class="subtitle">Actualiza los datos del cliente seleccionado.</p>
+            <h1><?= htmlspecialchars(t('clients.edit_title')) ?></h1>
+            <p class="subtitle"><?= htmlspecialchars(t('clients.edit_subtitle')) ?></p>
         </div>
-        <button type="button" class="btn back-button" onclick="history.back()">Volver</button>
+            <button type="button" class="btn back-button" onclick="history.back()"><?= htmlspecialchars(t('global.back')) ?></button>
     </div>
 
     <form method="POST">
-        <input type="text" name="nombre" value="<?= htmlspecialchars($cliente['nombre']); ?>" required>
-        <input type="text" name="apellido" value="<?= htmlspecialchars($cliente['apellido']); ?>" required>
-        <input type="email" name="email" value="<?= htmlspecialchars($cliente['email']); ?>" required>
-        <input type="text" name="telefono" value="<?= htmlspecialchars($cliente['telefono']); ?>">
-        <input type="text" name="direccion" value="<?= htmlspecialchars($cliente['direccion']); ?>">
-        <button type="submit">Actualizar</button>
+        <input type="text" name="nombre" value="<?= htmlspecialchars($cliente['nombre']); ?>" required placeholder="<?= htmlspecialchars(t('client.field.name')) ?>">
+        <input type="text" name="apellido" value="<?= htmlspecialchars($cliente['apellido']); ?>" required placeholder="<?= htmlspecialchars(t('client.field.last_name')) ?>">
+        <input type="email" name="email" value="<?= htmlspecialchars($cliente['email']); ?>" required placeholder="<?= htmlspecialchars(t('client.field.email')) ?>">
+        <input type="text" name="telefono" value="<?= htmlspecialchars($cliente['telefono']); ?>" placeholder="<?= htmlspecialchars(t('client.field.phone')) ?>">
+        <input type="text" name="direccion" value="<?= htmlspecialchars($cliente['direccion']); ?>" placeholder="<?= htmlspecialchars(t('client.field.address')) ?>">
+        <button type="submit"><?= htmlspecialchars(t('global.update')) ?></button>
     </form>
 </main>
 </body>

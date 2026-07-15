@@ -24,8 +24,8 @@ if($_POST){
 }
 ?>
 
+<?php require_once '../i18n.php'; ?>
 <!DOCTYPE html>
-<html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Agregar Cliente</title>
